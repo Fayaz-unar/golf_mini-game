@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#10231d" />
+  <title>Greenroom — Mini Golf</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Greenroom home">
+        <span class="brand-mark">g</span>
+        <span>greenroom<span class="brand-period">.</span></span>
+      </a>
+      <div class="top-meta">
+        <span class="live-dot"></span>
+        <span>THE GARDEN COURSE</span>
+        <span class="meta-divider"></span>
+        <span>EST. 2024</span>
+      </div>
+      <button class="sound-button" id="soundBtn" aria-label="Toggle sound" title="Toggle sound">
+        <span id="soundIcon">♪</span>
+      </button>
+    </header>
+
+    <section class="game-layout">
+      <div class="course-column">
+        <div class="course-heading">
+          <div>
+            <div class="eyebrow" id="holeLabel">HOLE 01 <span>—</span> PAR 3</div>
+            <h1 id="holeName">The First Light</h1>
+          </div>
+          <div class="hole-count">
+            <span id="holeNumber">01</span>
+            <span class="count-slash">/</span>
+            <span>03</span>
+          </div>
+        </div>
+
+        <div class="course-frame" id="courseFrame">
+          <canvas id="course" width="960" height="600" aria-label="Mini golf course. Aim with mouse or touch, set power, and shoot."></canvas>
+          <div class="course-stamp">
+            <span class="stamp-icon">✳</span>
+            <span>GREENROOM<br />GARDEN CLUB</span>
+          </div>
+          <div class="course-hint" id="hint">CLICK &amp; DRAG TO AIM</div>
+          <div class="result-toast" id="toast"></div>
+          <div class="aim-readout">
+            <span class="readout-label">AIM</span>
+            <span id="angleReadout">045°</span>
+          </div>
+        </div>
+
+        <div class="course-footer">
+          <span>
+            <span class="key">←</span><span class="key">→</span> AIM 
+            <span class="footer-gap"></span>
+            <span class="key">SPACE</span> HOLD TO CHARGE · RELEASE TO SHOOT
+          </span>
+          <span class="wind">
+            <span class="wind-icon" id="windArrow">↑</span> 
+            WIND <b id="windValue">2 MPH</b>
+          </span>
+        </div>
+
+        <div class="mobile-aim" aria-label="Touch aiming controls">
+          <span>AIM</span>
+          <button id="aimLeft" aria-label="Aim left">↶</button>
+          <span class="mobile-aim-value" id="mobileAimValue">045°</span>
+          <button id="aimRight" aria-label="Aim right">↷</button>
+          <small>OR DRAG ON THE COURSE</small>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <section class="score-panel">
+          <div class="panel-top">
+            <div class="eyebrow">YOUR ROUND</div>
+            <span class="round-tag">3 HOLES</span>
+          </div>
+          <div class="score-total">
+            <span class="total-label">TOTAL SCORE</span>
+            <span class="total-number" id="totalScore">—</span>
+          </div>
+          <div class="score-table">
+            <div class="table-row table-head">
+              <span>HOLE</span>
+              <span>PAR</span>
+              <span>STROKES</span>
+            </div>
+            <div class="table-row active-row" id="row0">
+              <span><i>01</i> First Light</span>
+              <span>3</span>
+              <span class="stroke-cell" id="strokes0">0</span>
+            </div>
+            <div class="table-row" id="row1">
+              <span><i>02</i> Fern Gully</span>
+              <span>4</span>
+              <span class="stroke-cell" id="strokes1">—</span>
+            </div>
+            <div class="table-row" id="row2">
+              <span><i>03</i> The Long Way</span>
+              <span>4</span>
+              <span class="stroke-cell" id="strokes2">—</span>
+            </div>
+          </div>
+          <div class="score-note">
+            <span class="note-star">✳</span>
+            <span id="scoreNote">Course par is 11 · Can you finish under par?</span>
+          </div>
+        </section>
+
+        <section class="shot-panel">
+          <div class="panel-top">
+            <div class="eyebrow">SHOT SETUP</div>
+            <span class="club-badge"><span>↗</span> PUTTER</span>
+          </div>
+          <div class="power-label">
+            <span>POWER</span>
+            <span class="power-value"><b id="powerValue">50</b><small>%</small></span>
+          </div>
+          <input id="power" type="range" min="10" max="100" value="50" aria-label="Shot power" />
+          <div class="range-labels">
+            <span>SOFT TOUCH</span>
+            <span>FULL SEND</span>
+          </div>
+          <div class="charge-hint">HOLD SPACE OR PRESS &amp; HOLD THE BUTTON</div>
+          <button class="shoot-button" id="shoot" aria-label="Hold to charge, release to shoot">
+            <span class="shoot-label" id="shootLabel">TAKE THE SHOT</span>
+            <span class="shoot-arrow" id="shootArrow">↗</span>
+            <span class="charge-progress" id="chargeProgress"></span>
+          </button>
+          <button class="reset-button" id="reset">
+            ↺ <span>RESET THIS HOLE</span>
+          </button>
+        </section>
+
+        <div class="tip-card">
+          <span class="tip-icon">✳</span>
+          <p>
+            <b>Little tip</b><br />
+            <span id="tipText">A gentle touch goes a long way on this green.</span>
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="bottom-bar">
+      <span>TAKE YOUR TIME. ENJOY THE GREEN.</span>
+      <span>MADE FOR A SUNNY AFTERNOON <span class="sun">☼</span></span>
+    </footer>
+  </main>
+
+  <!-- Final Scorecard Modal Dialog -->
+  <div class="modal-backdrop" id="scorecardModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="scorecard-dialog">
+      <div class="modal-header">
+        <span class="eyebrow">FINAL SCORECARD</span>
+        <h2 id="modalTitle">Round Complete</h2>
+      </div>
+      <div class="modal-metrics">
+        <div class="summary-metric">
+          <span class="metric-label">TOTAL STROKES</span>
+          <span class="metric-value" id="modalTotalStrokes">—</span>
+        </div>
+        <div class="summary-metric">
+          <span class="metric-label">SCORE TO PAR</span>
+          <span class="metric-value highlight" id="modalScoreToPar">E</span>
+        </div>
+        <div class="summary-metric">
+          <span class="metric-label">BEST ROUND</span>
+          <span class="metric-value" id="modalBestRound">—</span>
+        </div>
+      </div>
+      <div class="modal-table">
+        <div class="m-row m-head">
+          <span>HOLE</span>
+          <span>PAR</span>
+          <span>STROKES</span>
+          <span>RESULT</span>
+        </div>
+        <div class="m-row" id="mRow0">
+          <span>01 The First Light</span>
+          <span>3</span>
+          <span id="mStrokes0">—</span>
+          <span class="badge" id="mBadge0">—</span>
+        </div>
+        <div class="m-row" id="mRow1">
+          <span>02 Fern Gully</span>
+          <span>4</span>
+          <span id="mStrokes1">—</span>
+          <span class="badge" id="mBadge1">—</span>
+        </div>
+        <div class="m-row" id="mRow2">
+          <span>03 The Long Way</span>
+          <span>4</span>
+          <span id="mStrokes2">—</span>
+          <span class="badge" id="mBadge2">—</span>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="play-again-btn" id="playAgainBtn">
+          <span>↺ PLAY NEXT ROUND</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
