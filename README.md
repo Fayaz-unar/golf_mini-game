@@ -4,7 +4,8 @@ A browser-based three-hole mini golf game crafted with plain HTML5, CSS3, and mo
 
 ## Play
 
-Open `index.html` in any modern web browser or serve it with a local static file server.
+[Open `index.html` in any modern web browser or serve it with a local static file server.
+](https://golfmini-game.vercel.app/)
 
 ### Controls
 - **Aim:** Click or drag on the course to point in any direction, or use the **Left (←) / Right (→)** arrow keys (or mobile on-screen buttons) for precision aiming.
